@@ -1,25 +1,12 @@
 from app.resources import auth
 from flask import abort
 from flask_restful import Resource, reqparse, fields, marshal_with
-
-users = [
-    {
-        'id': 1,
-        'name': u'Charles',
-        'lastName': u'Ferrari',
-        'email': u'charlesferrari@gmail.com'
-    },
-    {
-        'id': 2,
-        'name': u'Federico',
-        'lastName': u'Fiorini',
-        'email': u'fedefiorini@gmail.com'
-    }
-]
+from app.models.user import User
+from app.common.utils import assign
 
 user_fields = {
     'name': fields.String,
-    'lastName': fields.String,
+    'lastname': fields.String,
     'email': fields.String,
     'uri': fields.Url('user')
 }
@@ -28,67 +15,69 @@ class UserListAPI(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str, required=True, help='No name provided', location='json')
-        self.parser.add_argument('lastName', type=str, required=True, help='No last name provided', location='json')
+        self.parser.add_argument('lastname', type=str, required=True, help='No last name provided', location='json')
         self.parser.add_argument('email', type=str, default="", location='json')
         super(UserListAPI, self).__init__()
 
     @auth.login_required
     @marshal_with(user_fields, envelope='users')
     def get(self):
-        # GET USERS : TODO from database
-        return users
+        # Return all users
+        return User.get_all()
 
     @auth.login_required
     @marshal_with(user_fields, envelope='user')
     def post(self):
-        # CREATE USERS : TODO from database
-        user = {'id': users[-1]['id'] + 1}
+        # Create new user
         args = self.parser.parse_args()
-        for k, v in args.iteritems():
-            if v is not None:
-                user[k] = v
+        user = User(args['name'], args['lastname'], args['email'])
 
-        users.append(user)
+        # Persist and return user
+        user.persist()
         return user, 201
 
 class UserAPI(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str, location='json')
-        self.parser.add_argument('lastName', type=str, location='json')
+        self.parser.add_argument('lastname', type=str, location='json')
         self.parser.add_argument('email', type=str, location='json')
         super(UserAPI, self).__init__()
 
     @auth.login_required
     @marshal_with(user_fields, envelope='user')
     def get(self, id):
-        # GET USER : TODO from database
-        user = filter(lambda t: t['id'] == id, users)
-        if len(user) == 0:
+        # Get user by id
+        user = User.get_by_id(id)
+        if user is None:
             abort(404)
 
+        # Return user
         return user
 
     @auth.login_required
     @marshal_with(user_fields, envelope='user')
     def put(self, id):
-        # GET USER : TODO from database
-        user = filter(lambda t: t['id'] == id, users)
-        if len(user) == 0:
+        # Get user by id
+        user = User.get_by_id(id)
+        if user is None:
             abort(404)
-        user = user[0]
-        args = self.parser.parse_args()
-        for k, v in args.iteritems():
-            if v is not None:
-                user[k] = v
 
+        # Update user fields
+        args = self.parser.parse_args()
+        user.name = assign(args['name'], user.name)
+        user.lastname = assign(args['lastname'], user.lastname)
+        user.email = assign(args['email'], user.email)
+
+        # Persist changes and return user
+        user.persist()
         return user
 
     @auth.login_required
     def delete(self, id):
-        # GET USER : TODO from database
-        user = filter(lambda t: t['id'] == id, users)
-        if len(user) == 0:
+        # Delete user
+        success = User.delete_by_id(id)
+        if not success:
             abort(404)
-        users.remove(user[0])
+
         return {'result': True}

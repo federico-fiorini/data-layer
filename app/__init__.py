@@ -1,17 +1,12 @@
 from flask import Flask
 from flask_restful import Api
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config.from_object('config')
 
 api = Api(app)
+db = SQLAlchemy(app)
 
 from app import routes
 
-from app.database import db_session, init_db
-
-init_db()
-
-@app.teardown_appcontext
-def shutdown_session(exception=None):
-    db_session.remove()
