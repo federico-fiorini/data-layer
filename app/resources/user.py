@@ -26,10 +26,10 @@ user_fields = {
 
 class UserListAPI(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, required=True, help='No name provided', location='json')
-        self.reqparse.add_argument('lastName', type=str, required=True, help='No last name provided', location='json')
-        self.reqparse.add_argument('email', type=str, default="", location='json')
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('name', type=str, required=True, help='No name provided', location='json')
+        self.parser.add_argument('lastName', type=str, required=True, help='No last name provided', location='json')
+        self.parser.add_argument('email', type=str, default="", location='json')
         super(UserListAPI, self).__init__()
 
     @auth.login_required
@@ -43,7 +43,7 @@ class UserListAPI(Resource):
     def post(self):
         # CREATE USERS : TODO from database
         user = {'id': users[-1]['id'] + 1}
-        args = self.reqparse.parse_args()
+        args = self.parser.parse_args()
         for k, v in args.iteritems():
             if v is not None:
                 user[k] = v
@@ -53,10 +53,10 @@ class UserListAPI(Resource):
 
 class UserAPI(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParser()
-        self.reqparse.add_argument('name', type=str, location='json')
-        self.reqparse.add_argument('lastName', type=str, location='json')
-        self.reqparse.add_argument('email', type=str, location='json')
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('name', type=str, location='json')
+        self.parser.add_argument('lastName', type=str, location='json')
+        self.parser.add_argument('email', type=str, location='json')
         super(UserAPI, self).__init__()
 
     @auth.login_required
@@ -77,7 +77,7 @@ class UserAPI(Resource):
         if len(user) == 0:
             abort(404)
         user = user[0]
-        args = self.reqparse.parse_args()
+        args = self.parser.parse_args()
         for k, v in args.iteritems():
             if v is not None:
                 user[k] = v

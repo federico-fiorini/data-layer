@@ -6,7 +6,7 @@ auth = HTTPTokenAuth(scheme='Bearer')
 
 @auth.verify_token
 def verify_token(token):
-    if token == app.config['SECRET_KEY']:
+    if token == app.config['AUTHORIZATION_KEY']:
         return True
     return False
 
