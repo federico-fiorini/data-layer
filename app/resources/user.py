@@ -8,10 +8,14 @@ user_fields = {
     'name': fields.String,
     'lastname': fields.String,
     'email': fields.String,
-    'uri': fields.Url('user')
+    'addresses': fields.Url('user_addresses', absolute=True),
+    'url': fields.Url('user', absolute=True)
 }
 
 class UserListAPI(Resource):
+    """
+    Resource to manage users
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str, required=True, help='No name provided', location='json')
@@ -37,6 +41,9 @@ class UserListAPI(Resource):
         return user, 201
 
 class UserAPI(Resource):
+    """
+    Resource to manage individual user
+    """
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str, location='json')
