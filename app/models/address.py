@@ -1,5 +1,6 @@
 from app import db
 
+
 class Address(db.Model):
     """
     Model that maps 'address' table from the database
@@ -11,14 +12,17 @@ class Address(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     street = db.Column(db.String(50), unique=False)
     house_number = db.Column(db.String(10), unique=False)
+    flat_number = db.Column(db.String(10), unique=False)
     post_code = db.Column(db.String(50), unique=False)
     city = db.Column(db.String(50), unique=False)
     country = db.Column(db.String(50), unique=False)
+    orders = db.relationship('Order', backref='address', lazy='dynamic')
 
-    def __init__(self, user_id=None, street=None, house_number=None, post_code=None, city=None, country=None):
+    def __init__(self, user_id=None, street=None, house_number=None, flat_number=None, post_code=None, city=None, country=None):
         self.user_id = user_id
         self.street = street
         self.house_number = house_number
+        self.flat_number = flat_number
         self.post_code = post_code
         self.city = city
         self.country = country

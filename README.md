@@ -1,8 +1,8 @@
 #DATA LAYER
 
 ###DEPENDENCIES
-    pip install flask
-    pip install flask-restful
-    pip install flask-httpauth
-    pip install psycopg2
-    pip install Flask-SQLAlchemy
+    pip3 install flask
+    pip3 install flask-restful
+    pip3 install flask-httpauth
+    pip3 install psycopg2
+    pip3 install Flask-SQLAlchemy

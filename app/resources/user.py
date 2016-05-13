@@ -9,8 +9,17 @@ user_fields = {
     'lastname': fields.String,
     'email': fields.String,
     'addresses': fields.Url('user_addresses', absolute=True),
+    'orders': fields.Url('user_orders', absolute=True)
+}
+
+user_list_fields = {
+    'name': fields.String,
+    'lastname': fields.String,
+    'email': fields.String,
+    'addresses': fields.Url('user_addresses', absolute=True),
     'url': fields.Url('user', absolute=True)
 }
+
 
 class UserListAPI(Resource):
     """
@@ -24,7 +33,7 @@ class UserListAPI(Resource):
         super(UserListAPI, self).__init__()
 
     @auth.login_required
-    @marshal_with(user_fields, envelope='users')
+    @marshal_with(user_list_fields, envelope='users')
     def get(self):
         # Return all users
         return User.get_all()
@@ -34,11 +43,15 @@ class UserListAPI(Resource):
     def post(self):
         # Create new user
         args = self.parser.parse_args()
-        user = User(args['name'], args['lastname'], args['email'])
+        user = User(name=args['name'], lastname=args['lastname'], email=args['email'])
 
         # Persist and return user
-        user.persist()
+        success = user.persist()
+        if not success:
+            abort(400, "User already exists")
+
         return user, 201
+
 
 class UserAPI(Resource):
     """

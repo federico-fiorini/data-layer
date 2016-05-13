@@ -1,4 +1,5 @@
 from app import db
+from sqlalchemy.exc import IntegrityError
 
 class User(db.Model):
     """
@@ -10,8 +11,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=False)
     lastname = db.Column(db.String(50), unique=False)
-    email = db.Column(db.String(120), unique=True)
+    email = db.Column(db.String(50), unique=True)
     addresses = db.relationship('Address', backref='user', lazy='dynamic')
+    orders = db.relationship('Order', backref='user', lazy='dynamic')
 
     def __init__(self, name=None, lastname=None, email=None):
         self.name = name
@@ -22,8 +24,13 @@ class User(db.Model):
         return '<User %r>' % self.id
 
     def persist(self):
-        db.session.add(self)
-        db.session.commit()
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except IntegrityError:
+            return False
+
+        return True
 
     @staticmethod
     def get_all():
