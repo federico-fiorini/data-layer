@@ -15,7 +15,7 @@ class BasicTestCase(unittest.TestCase):
         response = tester.get('/', content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        """ Test without Authorization header """
+        """ Test with Authorization header """
         response = tester.get('/', content_type='application/json', headers=headers)
         self.assertEqual(response.status_code, 200)
 

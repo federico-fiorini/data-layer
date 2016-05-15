@@ -9,10 +9,10 @@ class Order(db.Model):
 
     __tablename__ = 'order'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
-    cleaner_id = db.Column(db.Integer, db.ForeignKey('cleaner.id'))
+    order_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    address_id = db.Column(db.Integer, db.ForeignKey('address.address_id'))
+    cleaner_id = db.Column(db.Integer, db.ForeignKey('cleaner.cleaner_id'))
     date = db.Column(db.Date(), unique=False)
     start_time = db.Column(db.Time(), unique=False)
     end_time = db.Column(db.Time(), unique=False)
@@ -32,12 +32,15 @@ class Order(db.Model):
         self.extra_services = extra_services
 
     def __repr__(self):
-        return '<Order %r>' % self.id
+        return '<Order %r>' % self.order_id
 
     def persist(self):
         try:
             db.session.add(self)
             db.session.commit()
+            self.user_id
+            self.address_id
+            self.cleaner_id
         except IntegrityError:
             return False
 
@@ -61,11 +64,11 @@ class Order(db.Model):
 
     @staticmethod
     def get_by_id(order_id):
-        return Order.query.filter_by(id=order_id).first()
+        return Order.query.filter_by(order_id=order_id).first()
 
     @staticmethod
     def delete_by_id(order_id):
-        order = Order.query.filter_by(id=order_id).first()
+        order = Order.query.filter_by(order_id=order_id).first()
         if order is None:
             return False
 

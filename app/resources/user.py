@@ -17,6 +17,7 @@ user_list_fields = {
     'lastname': fields.String,
     'email': fields.String,
     'addresses': fields.Url('user_addresses', absolute=True),
+    'orders': fields.Url('user_orders', absolute=True),
     'url': fields.Url('user', absolute=True)
 }
 
@@ -39,7 +40,7 @@ class UserListAPI(Resource):
         return User.get_all()
 
     @auth.login_required
-    @marshal_with(user_fields, envelope='user')
+    @marshal_with(user_list_fields, envelope='user')
     def post(self):
         # Create new user
         args = self.parser.parse_args()
@@ -66,9 +67,9 @@ class UserAPI(Resource):
 
     @auth.login_required
     @marshal_with(user_fields, envelope='user')
-    def get(self, id):
+    def get(self, user_id):
         # Get user by id
-        user = User.get_by_id(id)
+        user = User.get_by_id(user_id)
         if user is None:
             abort(404)
 
@@ -77,9 +78,9 @@ class UserAPI(Resource):
 
     @auth.login_required
     @marshal_with(user_fields, envelope='user')
-    def put(self, id):
+    def put(self, user_id):
         # Get user by id
-        user = User.get_by_id(id)
+        user = User.get_by_id(user_id)
         if user is None:
             abort(404)
 
@@ -94,9 +95,9 @@ class UserAPI(Resource):
         return user
 
     @auth.login_required
-    def delete(self, id):
+    def delete(self, user_id):
         # Delete user
-        success = User.delete_by_id(id)
+        success = User.delete_by_id(user_id)
         if not success:
             abort(404)
 

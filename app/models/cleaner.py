@@ -9,7 +9,7 @@ class Cleaner(db.Model):
 
     __tablename__ = 'cleaner'
 
-    id = db.Column(db.Integer, primary_key=True)
+    cleaner_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=False)
     lastname = db.Column(db.String(50), unique=False)
     email = db.Column(db.String(50), unique=True)
@@ -24,7 +24,7 @@ class Cleaner(db.Model):
         self.mobile_number = mobile_number
 
     def __repr__(self):
-        return '<Cleaner %r>' % self.id
+        return '<Cleaner %r>' % self.cleaner_id
 
     def persist(self):
         try:
@@ -41,11 +41,11 @@ class Cleaner(db.Model):
 
     @staticmethod
     def get_by_id(cleaner_id):
-        return Cleaner.query.filter_by(id=cleaner_id).first()
+        return Cleaner.query.filter_by(cleaner_id=cleaner_id).first()
 
     @staticmethod
     def delete_by_id(cleaner_id):
-        cleaner = Cleaner.query.filter_by(id=cleaner_id).first()
+        cleaner = Cleaner.query.filter_by(cleaner_id=cleaner_id).first()
         if cleaner is None:
             return False
 

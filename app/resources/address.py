@@ -2,6 +2,7 @@ from app.resources import auth
 from flask import abort
 from flask_restful import Resource, reqparse, fields, marshal_with
 from app.models.address import Address
+from app.models.user import User
 from app.common.utils import assign
 
 address_fields = {
@@ -42,9 +43,9 @@ class AddressAPI(Resource):
 
     @auth.login_required
     @marshal_with(address_fields, envelope='address')
-    def get(self, id):
+    def get(self, address_id):
         # Get address by id
-        address = Address.get_by_id(id)
+        address = Address.get_by_id(address_id)
         if address is None:
             abort(404)
 
@@ -53,9 +54,9 @@ class AddressAPI(Resource):
 
     @auth.login_required
     @marshal_with(address_fields, envelope='address')
-    def put(self, id):
+    def put(self, address_id):
         # Get address by id
-        address = Address.get_by_id(id)
+        address = Address.get_by_id(address_id)
         if address is None:
             abort(404)
 
@@ -73,9 +74,9 @@ class AddressAPI(Resource):
         return address
 
     @auth.login_required
-    def delete(self, id):
+    def delete(self, address_id):
         # Delete address
-        success = Address.delete_by_id(id)
+        success = Address.delete_by_id(address_id)
         if not success:
             abort(404)
 
@@ -110,16 +111,21 @@ class AddressListByUserAPI(Resource):
 
     @auth.login_required
     @marshal_with(address_list_fields, envelope='addresses')
-    def get(self, id):
+    def get(self, user_id):
         # Return all user's addresses
-        return Address.get_all_by_user(id)
+        return Address.get_all_by_user(user_id)
 
     @auth.login_required
     @marshal_with(address_list_fields, envelope='address')
-    def post(self, id):
+    def post(self, user_id):
+
+        # Validate user
+        if User.get_by_id(user_id) is None:
+            abort(404, 'User not found')
+
         # Create new address
         args = self.parser.parse_args()
-        address = Address(user_id=id, street=args['street'], house_number=args['house_number'], flat_number=args['flat_number'],
+        address = Address(user_id=user_id, street=args['street'], house_number=args['house_number'], flat_number=args['flat_number'],
                           post_code=args['post_code'], city=args['city'], country=args['country'])
 
         # Persist and return address

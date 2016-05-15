@@ -8,7 +8,7 @@ class User(db.Model):
 
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=False)
     lastname = db.Column(db.String(50), unique=False)
     email = db.Column(db.String(50), unique=True)
@@ -21,12 +21,13 @@ class User(db.Model):
         self.lastname = lastname
 
     def __repr__(self):
-        return '<User %r>' % self.id
+        return '<User %r>' % self.user_id
 
     def persist(self):
         try:
             db.session.add(self)
             db.session.commit()
+            self.user_id
         except IntegrityError:
             return False
 
@@ -38,11 +39,11 @@ class User(db.Model):
 
     @staticmethod
     def get_by_id(user_id):
-        return User.query.filter_by(id=user_id).first()
+        return User.query.filter_by(user_id=user_id).first()
 
     @staticmethod
     def delete_by_id(user_id):
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(user_id=user_id).first()
         if user is None:
             return False
 

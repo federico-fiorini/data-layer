@@ -10,6 +10,7 @@ cleaner_fields = {
     'email': fields.String,
     'mobile_number': fields.String,
     'schedules': fields.Url('cleaner_schedule', absolute=True),
+    'orders': fields.Url('cleaner_orders', absolute=True)
 }
 
 cleaner_list_fields = {
@@ -18,6 +19,7 @@ cleaner_list_fields = {
     'email': fields.String,
     'mobile_number': fields.String,
     'schedules': fields.Url('cleaner_schedule', absolute=True),
+    'orders': fields.Url('cleaner_orders', absolute=True),
     'url': fields.Url('cleaner', absolute=True)
 }
 
@@ -69,9 +71,9 @@ class CleanerAPI(Resource):
 
     @auth.login_required
     @marshal_with(cleaner_fields, envelope='cleaner')
-    def get(self, id):
+    def get(self, cleaner_id):
         # Get cleaner by id
-        cleaner = Cleaner.get_by_id(id)
+        cleaner = Cleaner.get_by_id(cleaner_id)
         if cleaner is None:
             abort(404)
 
@@ -80,9 +82,9 @@ class CleanerAPI(Resource):
 
     @auth.login_required
     @marshal_with(cleaner_fields, envelope='cleaner')
-    def put(self, id):
+    def put(self, cleaner_id):
         # Get cleaner by id
-        cleaner = Cleaner.get_by_id(id)
+        cleaner = Cleaner.get_by_id(cleaner_id)
         if cleaner is None:
             abort(404)
 
@@ -98,9 +100,9 @@ class CleanerAPI(Resource):
         return cleaner
 
     @auth.login_required
-    def delete(self, id):
+    def delete(self, cleaner_id):
         # Delete cleaner
-        success = Cleaner.delete_by_id(id)
+        success = Cleaner.delete_by_id(cleaner_id)
         if not success:
             abort(404)
 

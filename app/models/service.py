@@ -8,7 +8,7 @@ class Service(db.Model):
 
     __tablename__ = 'service'
 
-    id = db.Column(db.Integer, primary_key=True)
+    service_id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Enum('normal', 'special', 'extra'), unique=False)
     name = db.Column(db.String(50), unique=False)
     time = db.Column(db.Interval(), unique=False)
@@ -19,7 +19,7 @@ class Service(db.Model):
         self.time = time
 
     def __repr__(self):
-        return '<Service %r>' % self.id
+        return '<Service %r>' % self.service_id
 
     def persist(self):
         db.session.add(self)
@@ -31,11 +31,11 @@ class Service(db.Model):
 
     @staticmethod
     def get_by_id(service_id):
-        return Service.query.filter_by(id=service_id).first()
+        return Service.query.filter_by(service_id=service_id).first()
 
     @staticmethod
     def delete_by_id(service_id):
-        service = Service.query.filter_by(id=service_id).first()
+        service = Service.query.filter_by(service_id=service_id).first()
         if service is None:
             return False
 

@@ -6,7 +6,8 @@ index_fields = {
     'addresses': fields.Url('addresses', absolute=True),
     'cleaners': fields.Url('cleaners', absolute=True),
     'services': fields.Url('services', absolute=True),
-    'orders': fields.Url('orders', absolute=True)
+    'orders': fields.Url('orders', absolute=True),
+    'schedules': fields.Url('schedules', absolute=True)
 }
 
 

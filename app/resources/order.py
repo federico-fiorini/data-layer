@@ -2,6 +2,9 @@ from app.resources import auth
 from flask import abort
 from flask_restful import Resource, reqparse, fields, marshal_with
 from app.models.order import Order
+from app.models.address import Address
+from app.models.cleaner import Cleaner
+from app.models.user import User
 from app.common.utils import assign
 
 order_fields = {
@@ -11,8 +14,9 @@ order_fields = {
     'rooms': fields.String,
     'special_rooms': fields.String,
     'extra_services': fields.String,
-    # 'cleaner': fields.Url('cleaner', absolute=True),
-    # 'address': fields.Url('address', absolute=True)
+    'cleaner': fields.Url('cleaner', absolute=True),
+    'user': fields.Url('user', absolute=True),
+    'address': fields.Url('address', absolute=True)
 }
 
 order_list_fields = {
@@ -22,6 +26,9 @@ order_list_fields = {
     'rooms': fields.String,
     'special_rooms': fields.String,
     'extra_services': fields.String,
+    'cleaner': fields.Url('cleaner', absolute=True),
+    'user': fields.Url('user', absolute=True),
+    'address': fields.Url('address', absolute=True),
     'url': fields.Url('order', absolute=True)
 }
 
@@ -44,9 +51,9 @@ class OrderAPI(Resource):
 
     @auth.login_required
     @marshal_with(order_fields, envelope='order')
-    def get(self, id):
+    def get(self, order_id):
         # Get order by id
-        order = Order.get_by_id(id)
+        order = Order.get_by_id(order_id)
         if order is None:
             abort(404)
 
@@ -55,9 +62,9 @@ class OrderAPI(Resource):
 
     @auth.login_required
     @marshal_with(order_fields, envelope='order')
-    def put(self, id):
+    def put(self, order_id):
         # Get order by id
-        order = Order.get_by_id(id)
+        order = Order.get_by_id(order_id)
         if order is None:
             abort(404)
 
@@ -77,9 +84,9 @@ class OrderAPI(Resource):
         return order
 
     @auth.login_required
-    def delete(self, id):
+    def delete(self, order_id):
         # Delete order
-        success = Order.delete_by_id(id)
+        success = Order.delete_by_id(order_id)
         if not success:
             abort(404)
 
@@ -104,7 +111,6 @@ class OrderListByUserAPI(Resource):
     """
     def __init__(self):
         self.parser = reqparse.RequestParser()
-        self.parser = reqparse.RequestParser()
         self.parser.add_argument('cleaner_id', type=str, required=True, help='No cleaner provided', location='json')
         self.parser.add_argument('address_id', type=str, required=True, help='No address provided', location='json')
         self.parser.add_argument('date', type=str, required=True, help='No date provided', location='json')
@@ -117,16 +123,28 @@ class OrderListByUserAPI(Resource):
 
     @auth.login_required
     @marshal_with(order_list_fields, envelope='orders')
-    def get(self, id):
+    def get(self, user_id):
         # Return all user's orders
-        return Order.get_all_by_user(id)
+        return Order.get_all_by_user(user_id)
 
     @auth.login_required
     @marshal_with(order_list_fields, envelope='order')
-    def post(self, id):
-        # Create new order
+    def post(self, user_id):
+        # Get arguments
         args = self.parser.parse_args()
-        order = Order(user_id=id, address_id=args['address_id'], cleaner_id=args['cleaner_id'], date=args['date'],
+
+        # Validate user, address and cleaner ids
+        if User.get_by_id(user_id) is None:
+            abort(404, 'User not found')
+
+        if Address.get_by_id(args['address_id']) is None:
+            abort(404, 'Address not found')
+
+        if Cleaner.get_by_id(args['cleaner_id']) is None:
+            abort(404, 'Cleaner not found')
+
+        # Create new order
+        order = Order(user_id=user_id, address_id=args['address_id'], cleaner_id=args['cleaner_id'], date=args['date'],
                         start_time=args['start_time'], end_time=args['end_time'], rooms=args['rooms'],
                         special_rooms=args['special_rooms'], extra_services=args['extra_services'])
 
@@ -145,9 +163,9 @@ class OrderListByCleanerAPI(Resource):
 
     @auth.login_required
     @marshal_with(order_list_fields, envelope='orders')
-    def get(self, id):
+    def get(self, cleaner_id):
         # Return all cleaner's orders
-        return Order.get_all_by_cleaner(id)
+        return Order.get_all_by_cleaner(cleaner_id)
 
 
 class OrderListByAddressAPI(Resource):
@@ -157,6 +175,6 @@ class OrderListByAddressAPI(Resource):
 
     @auth.login_required
     @marshal_with(order_list_fields, envelope='orders')
-    def get(self, id):
+    def get(self, address_id):
         # Return all orders by address
-        return Order.get_all_by_address(id)
+        return Order.get_all_by_address(address_id)

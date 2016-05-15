@@ -8,8 +8,8 @@ class Address(db.Model):
 
     __tablename__ = 'address'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    address_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     street = db.Column(db.String(50), unique=False)
     house_number = db.Column(db.String(10), unique=False)
     flat_number = db.Column(db.String(10), unique=False)
@@ -28,7 +28,7 @@ class Address(db.Model):
         self.country = country
 
     def __repr__(self):
-        return '<Address %r>' % self.id
+        return '<Address %r>' % self.address_id
 
     def persist(self):
         db.session.add(self)
@@ -44,11 +44,11 @@ class Address(db.Model):
 
     @staticmethod
     def get_by_id(address_id):
-        return Address.query.filter_by(id=address_id).first()
+        return Address.query.filter_by(address_id=address_id).first()
 
     @staticmethod
     def delete_by_id(address_id):
-        address = Address.query.filter_by(id=address_id).first()
+        address = Address.query.filter_by(address_id=address_id).first()
         if address is None:
             return False
 
