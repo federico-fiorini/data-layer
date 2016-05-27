@@ -10,6 +10,7 @@ api.add_resource(ServiceListAPI, '/api/v1.0/services', endpoint='services')
 
 # Users endpoints
 api.add_resource(UserListAPI, '/api/v1.0/users', endpoint='users')
+api.add_resource(UserAuthenticateAPI, '/api/v1.0/user/authentication', endpoint='user_authentication')
 api.add_resource(UserAPI, '/api/v1.0/user/<int:user_id>', endpoint='user')
 api.add_resource(AddressListByUserAPI, '/api/v1.0/user/<int:user_id>/addresses', endpoint='user_addresses')
 api.add_resource(OrderListByUserAPI, '/api/v1.0/user/<int:user_id>/orders', endpoint='user_orders')

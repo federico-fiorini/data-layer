@@ -30,7 +30,8 @@ class UserListAPI(Resource):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str, required=True, help='No name provided', location='json')
         self.parser.add_argument('lastname', type=str, required=True, help='No last name provided', location='json')
-        self.parser.add_argument('email', type=str, default="", location='json')
+        self.parser.add_argument('email', type=str, required=True, help='No email provided', location='json')
+        self.parser.add_argument('password', type=str, required=True, help='No password provided', location='json')
         super(UserListAPI, self).__init__()
 
     @auth.login_required
@@ -44,7 +45,7 @@ class UserListAPI(Resource):
     def post(self):
         # Create new user
         args = self.parser.parse_args()
-        user = User(name=args['name'], lastname=args['lastname'], email=args['email'])
+        user = User(name=args['name'], lastname=args['lastname'], email=args['email'], password=args['password'])
 
         # Persist and return user
         success = user.persist()
@@ -63,6 +64,7 @@ class UserAPI(Resource):
         self.parser.add_argument('name', type=str, location='json')
         self.parser.add_argument('lastname', type=str, location='json')
         self.parser.add_argument('email', type=str, location='json')
+        self.parser.add_argument('password', type=str, location='json')
         super(UserAPI, self).__init__()
 
     @auth.login_required
@@ -89,6 +91,7 @@ class UserAPI(Resource):
         user.name = assign(args['name'], user.name)
         user.lastname = assign(args['lastname'], user.lastname)
         user.email = assign(args['email'], user.email)
+        user.password = assign(args['password'], user.password)
 
         # Persist changes and return user
         user.persist()
@@ -102,3 +105,29 @@ class UserAPI(Resource):
             abort(404)
 
         return {'result': True}
+
+class UserAuthenticateAPI(Resource):
+    """
+    Resource to manage user authentication
+    """
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('email', type=str, required=True, help='No email provided', location='json')
+        self.parser.add_argument('password', type=str, required=True, help='No password provided', location='json')
+        super(UserAuthenticateAPI, self).__init__()
+
+    @auth.login_required
+    @marshal_with(user_list_fields, envelope='user')
+    def post(self):
+        args = self.parser.parse_args()
+
+        # Get user by email
+        user = User.get_by_email(args['email'])
+        if user is None:
+            abort(404)
+
+        # Check password
+        if args['password'] != user.password:
+            abort(400)
+
+        return user

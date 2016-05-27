@@ -494,6 +494,12 @@ ALTER TABLE ONLY "user"
     ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
 
 
+ALTER TABLE ONLY "user"
+    ALTER COLUMN "email" SET NOT NULL;
+
+ALTER TABLE ONLY "user"
+    ADD COLUMN "password" text NOT NULL;
+
 --
 -- Name: _user_address; Type: FK CONSTRAINT; Schema: public; Owner:
 --

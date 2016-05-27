@@ -12,12 +12,14 @@ class User(db.Model):
     name = db.Column(db.String(50), unique=False)
     lastname = db.Column(db.String(50), unique=False)
     email = db.Column(db.String(50), unique=True)
+    password = db.Column(db.String(100), unique=False)
     addresses = db.relationship('Address', backref='user', lazy='dynamic')
     orders = db.relationship('Order', backref='user', lazy='dynamic')
 
-    def __init__(self, name=None, lastname=None, email=None):
+    def __init__(self, name=None, lastname=None, email=None, password=None):
         self.name = name
         self.email = email
+        self.password = password
         self.lastname = lastname
 
     def __repr__(self):
@@ -40,6 +42,10 @@ class User(db.Model):
     @staticmethod
     def get_by_id(user_id):
         return User.query.filter_by(user_id=user_id).first()
+
+    @staticmethod
+    def get_by_email(user_email):
+        return User.query.filter_by(email=user_email).first()
 
     @staticmethod
     def delete_by_id(user_id):
