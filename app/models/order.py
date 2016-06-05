@@ -19,8 +19,11 @@ class Order(db.Model):
     rooms = db.Column(db.Integer(), unique=False)
     special_rooms = db.Column(db.String(500), unique=False)
     extra_services = db.Column(db.String(500), unique=False)
+    transaction = db.Column(db.String(500), unique=False)
+    reference = db.Column(db.String(500), unique=True)
+    price = db.Column(db.Float(), unique=False)
 
-    def __init__(self, user_id=None, address_id=None, cleaner_id=None, date=None, start_time=None, end_time=None, rooms=None, special_rooms=None, extra_services=None):
+    def __init__(self, user_id=None, address_id=None, cleaner_id=None, date=None, start_time=None, end_time=None, rooms=None, special_rooms=None, extra_services=None, transaction = None, reference=None, price=None):
         self.user_id = user_id
         self.address_id = address_id
         self.cleaner_id = cleaner_id
@@ -30,6 +33,9 @@ class Order(db.Model):
         self.rooms = rooms
         self.special_rooms = special_rooms
         self.extra_services = extra_services
+        self.transaction = transaction
+        self.reference = reference
+        self.price = price
 
     def __repr__(self):
         return '<Order %r>' % self.order_id
@@ -49,6 +55,10 @@ class Order(db.Model):
     @staticmethod
     def get_all():
         return Order.query.all()
+
+    @staticmethod
+    def get_by_reference(reference):
+        return Order.query.filter_by(reference=reference).first()
 
     @staticmethod
     def get_all_by_user(user_id):

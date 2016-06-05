@@ -14,9 +14,13 @@ order_fields = {
     'rooms': fields.String,
     'special_rooms': fields.String,
     'extra_services': fields.String,
+    'reference': fields.String,
+    'transaction': fields.String,
+    'price': fields.String,
     'cleaner': fields.Url('cleaner', absolute=True),
     'user': fields.Url('user', absolute=True),
-    'address': fields.Url('address', absolute=True)
+    'address': fields.Url('address', absolute=True),
+
 }
 
 order_list_fields = {
@@ -26,6 +30,9 @@ order_list_fields = {
     'rooms': fields.String,
     'special_rooms': fields.String,
     'extra_services': fields.String,
+    'reference': fields.String,
+    'transaction': fields.String,
+    'price': fields.String,
     'cleaner': fields.Url('cleaner', absolute=True),
     'user': fields.Url('user', absolute=True),
     'address': fields.Url('address', absolute=True),
@@ -47,6 +54,9 @@ class OrderAPI(Resource):
         self.parser.add_argument('rooms', type=str,  required=False, location='json')
         self.parser.add_argument('special_rooms', type=str,  required=False, location='json')
         self.parser.add_argument('extra_services', type=str,  required=False, location='json')
+        self.parser.add_argument('reference', type=str, required=False, location='json')
+        self.parser.add_argument('transaction', type=str, required=False, location='json')
+        self.parser.add_argument('price', type=str, required=False, location='json')
         super(OrderAPI, self).__init__()
 
     @auth.login_required
@@ -78,6 +88,9 @@ class OrderAPI(Resource):
         order.rooms = assign(args['rooms'], order.rooms)
         order.special_rooms = assign(args['special_rooms'], order.special_rooms)
         order.extra_services = assign(args['extra_services'], order.extra_services)
+        order.extra_services = assign(args['reference'], order.reference)
+        order.extra_services = assign(args['transaction'], order.transaction_code)
+        order.extra_services = assign(args['price'], order.price)
 
         # Persist changes and return order
         order.persist()
@@ -119,6 +132,9 @@ class OrderListByUserAPI(Resource):
         self.parser.add_argument('rooms', type=str, required=True, help='No number of rooms provided', location='json')
         self.parser.add_argument('special_rooms', type=str, required=False, default=None, location='json')
         self.parser.add_argument('extra_services', type=str, required=False, default=None, location='json')
+        self.parser.add_argument('reference', type=str, required=False, default=None, location='json')
+        self.parser.add_argument('transaction', type=str, required=False, default=None, location='json')
+        self.parser.add_argument('price', type=str, required=True, default=None, location='json')
         super(OrderListByUserAPI, self).__init__()
 
     @auth.login_required
@@ -146,7 +162,9 @@ class OrderListByUserAPI(Resource):
         # Create new order
         order = Order(user_id=user_id, address_id=args['address_id'], cleaner_id=args['cleaner_id'], date=args['date'],
                         start_time=args['start_time'], end_time=args['end_time'], rooms=args['rooms'],
-                        special_rooms=args['special_rooms'], extra_services=args['extra_services'])
+                        special_rooms=args['special_rooms'], extra_services=args['extra_services'], reference=args['reference'],
+                        transaction=args['transaction'], price=args['price']
+                      )
 
         # Persist and return order
         success = order.persist()
