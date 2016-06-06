@@ -1,5 +1,5 @@
 from app.resources import auth
-from flask import abort
+from flask import abort, request
 from flask_restful import Resource, reqparse, fields, marshal_with
 from app.models.order import Order
 from app.models.address import Address
@@ -88,9 +88,9 @@ class OrderAPI(Resource):
         order.rooms = assign(args['rooms'], order.rooms)
         order.special_rooms = assign(args['special_rooms'], order.special_rooms)
         order.extra_services = assign(args['extra_services'], order.extra_services)
-        order.extra_services = assign(args['reference'], order.reference)
-        order.extra_services = assign(args['transaction'], order.transaction)
-        order.extra_services = assign(args['price'], order.price)
+        order.reference = assign(args['reference'], order.reference)
+        order.transaction = assign(args['transaction'], order.transaction)
+        order.price = assign(args['price'], order.price)
 
         # Persist changes and return order
         order.persist()
@@ -114,15 +114,14 @@ class OrderListAPI(Resource):
     @auth.login_required
     @marshal_with(order_list_fields, envelope='orders')
     def get(self):
-        # Return all orders
-        return Order.get_all()
 
-class OrderByRefereceAPI(Resource):
-    @auth.login_required
-    @marshal_with(order_list_fields, envelope='order')
-    def get(self, reference):
-        # Return all cleaner's orders
-        return Order.get_by_reference(reference)
+        # When there is a reference, filter the request and send just the order with the reference
+        ref = request.args.get('ref')
+        if ref is not None:
+            return Order.get_by_reference(ref)
+
+        # Otherwise return all orders
+        return Order.get_all()
 
 
 class OrderListByUserAPI(Resource):
