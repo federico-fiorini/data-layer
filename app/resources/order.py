@@ -89,7 +89,7 @@ class OrderAPI(Resource):
         order.special_rooms = assign(args['special_rooms'], order.special_rooms)
         order.extra_services = assign(args['extra_services'], order.extra_services)
         order.extra_services = assign(args['reference'], order.reference)
-        order.extra_services = assign(args['transaction'], order.transaction_code)
+        order.extra_services = assign(args['transaction'], order.transaction)
         order.extra_services = assign(args['price'], order.price)
 
         # Persist changes and return order
@@ -116,6 +116,13 @@ class OrderListAPI(Resource):
     def get(self):
         # Return all orders
         return Order.get_all()
+
+class OrderByRefereceAPI(Resource):
+    @auth.login_required
+    @marshal_with(order_list_fields, envelope='order')
+    def get(self, reference):
+        # Return all cleaner's orders
+        return Order.get_by_reference(reference)
 
 
 class OrderListByUserAPI(Resource):

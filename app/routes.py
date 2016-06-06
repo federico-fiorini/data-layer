@@ -33,3 +33,4 @@ api.add_resource(ScheduleAPI, '/api/v1.0/schedule/<int:schedule_id>', endpoint='
 # Order endpoints
 api.add_resource(OrderListAPI, '/api/v1.0/orders', endpoint='orders')
 api.add_resource(OrderAPI, '/api/v1.0/order/<int:order_id>', endpoint='order')
+api.add_resource(OrderByRefereceAPI, '/api/v1.0/order/reference/<string:reference>', endpoint='order_reference')
