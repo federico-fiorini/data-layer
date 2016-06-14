@@ -12,11 +12,13 @@ class Service(db.Model):
     type = db.Column(db.Enum('normal', 'special', 'extra'), unique=False)
     name = db.Column(db.String(50), unique=False)
     time = db.Column(db.Interval(), unique=False)
+    description = db.Column(db.String(100), unique=False)
 
-    def __init__(self, type=None, name=None, time=None):
+    def __init__(self, type=None, name=None, time=None, description=None):
         self.type = type
         self.name = name
         self.time = time
+        self.description = description
 
     def __repr__(self):
         return '<Service %r>' % self.service_id
