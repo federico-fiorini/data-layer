@@ -1,13 +1,13 @@
 from app.resources import auth
-from flask import abort
 from flask_restful import Resource, reqparse, fields, marshal_with
 from app.models.service import Service
-from app.common.utils import assign
+
 
 service_fields = {
     'type': fields.String,
     'name': fields.String,
-    'time': fields.String
+    'time': fields.String,
+    'description' : fields.String
 }
 
 

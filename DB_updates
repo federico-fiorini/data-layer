@@ -1,0 +1,23 @@
+--
+-- UPDATES FROM JUNE 20, ALREADY MERGED INTO SERVER
+-- PULL REQUEST #10
+--
+
+ALTER TABLE "public"."order"
+
+  ADD COLUMN "reference" text,
+
+  ADD COLUMN "transaction" text,
+
+  ADD COLUMN "price" float;
+
+COMMENT ON COLUMN "public"."order"."reference" IS 'Reference to the order composed by the date+checkout code e.g.: "201605023ad939f785544e4ec55d852d89842beb"';
+
+COMMENT ON COLUMN "public"."order"."transaction_code" IS 'Stores the payment transaction (after concluded)  e.g. "272C1550-0BC4-47DA-B112-0ED6AD596E5D"';
+
+COMMENT ON COLUMN "public"."order"."price" IS 'Price agreed during payment calculation’;
+
+COMMENT ON COLUMN "public"."order"."reference" IS 'Reference to the order composed by the date+session code e.g.: "20160502ad8abc25-92f8-4e34-955f-f093a5d9fd7e"';
+
+ALTER TABLE "public"."service" ADD COLUMN "description" text;
+
