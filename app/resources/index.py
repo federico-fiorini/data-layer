@@ -8,7 +8,9 @@ index_fields = {
     'cleaners': fields.Url('cleaners', absolute=True),
     'services': fields.Url('services', absolute=True),
     'orders': fields.Url('orders', absolute=True),
+    'order_reference': fields.Url('order_reference', absolute=True),
     'schedules': fields.Url('schedules', absolute=True)
+
 }
 
 
@@ -20,4 +22,9 @@ class IndexAPI(Resource):
     @auth.login_required
     @marshal_with(index_fields, envelope='apis')
     def get(self):
-        return self
+        return IndexFields()
+
+
+class IndexFields:
+    def __init__(self):
+        self.reference = "REFERENCE_NUMBER"

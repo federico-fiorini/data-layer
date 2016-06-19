@@ -105,25 +105,31 @@ class OrderAPI(Resource):
 
         return {'result': True}
 
+class OrderByReferenceAPI(Resource):
+    """
+    Resource to return order by reference
+    """
+    @auth.login_required
+    @marshal_with(order_list_fields, envelope='order')
+    def get(self, reference):
+        if reference is not None:
+            # Try to get the orders from that reference otherwise returns an 404 error
+            orders = Order.get_by_reference(reference)
+            if orders:
+                return orders
+            abort(404)
+
+        abort(400, 'Parameters incorrect')
+
 
 class OrderListAPI(Resource):
     """
     Resource to manage orders list
     """
-
     @auth.login_required
     @marshal_with(order_list_fields, envelope='orders')
     def get(self):
-
-        # When there is a reference, filter the request and send just the order with the reference
-        ref = request.args.get('ref')
-
-        if ref is not None:
-            # Try to get the orders from that reference otherwise returns an 404 error
-            orders = Order.get_by_reference(ref)
-            if orders:
-                return orders
-            abort(404)
+        return Order.get_all()
 
 
 class OrderListByUserAPI(Resource):
