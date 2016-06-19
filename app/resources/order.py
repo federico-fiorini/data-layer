@@ -117,11 +117,13 @@ class OrderListAPI(Resource):
 
         # When there is a reference, filter the request and send just the order with the reference
         ref = request.args.get('ref')
-        if ref is not None:
-            return Order.get_by_reference(ref)
 
-        # Otherwise return all orders
-        return Order.get_all()
+        if ref is not None:
+            # Try to get the orders from that reference otherwise returns an 404 error
+            orders = Order.get_by_reference(ref)
+            if orders:
+                return orders
+            abort(404)
 
 
 class OrderListByUserAPI(Resource):
