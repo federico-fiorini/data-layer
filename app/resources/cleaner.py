@@ -9,8 +9,8 @@ cleaner_fields = {
     'lastname': fields.String,
     'email': fields.String,
     'mobile_number': fields.String,
-    'schedules': fields.Url('cleaner_schedule', absolute=True),
-    'orders': fields.Url('cleaner_orders', absolute=True)
+    'schedules': fields.Url('cleaner_schedule', absolute=False),
+    'orders': fields.Url('cleaner_orders', absolute=False)
 }
 
 cleaner_list_fields = {
@@ -18,9 +18,9 @@ cleaner_list_fields = {
     'lastname': fields.String,
     'email': fields.String,
     'mobile_number': fields.String,
-    'schedules': fields.Url('cleaner_schedule', absolute=True),
-    'orders': fields.Url('cleaner_orders', absolute=True),
-    'url': fields.Url('cleaner', absolute=True)
+    'schedules': fields.Url('cleaner_schedule', absolute=False),
+    'orders': fields.Url('cleaner_orders', absolute=False),
+    'url': fields.Url('cleaner', absolute=False)
 }
 
 

@@ -12,7 +12,7 @@ address_fields = {
     'post_code': fields.String,
     'city': fields.String,
     'country': fields.String,
-    'orders': fields.Url('address_orders', absolute=True)
+    'orders': fields.Url('address_orders', absolute=False)
 }
 
 address_list_fields = {
@@ -22,8 +22,8 @@ address_list_fields = {
     'post_code': fields.String,
     'city': fields.String,
     'country': fields.String,
-    'orders': fields.Url('address_orders', absolute=True),
-    'url': fields.Url('address', absolute=True)
+    'orders': fields.Url('address_orders', absolute=False),
+    'url': fields.Url('address', absolute=False)
 }
 
 

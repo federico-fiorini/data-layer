@@ -7,7 +7,7 @@ service_fields = {
     'type': fields.String,
     'name': fields.String,
     'time': fields.String,
-    'description' : fields.String
+    'description': fields.String
 }
 
 

@@ -12,7 +12,7 @@ schedule_fields = {
     'day_of_week': fields.String,
     'start_time': fields.String,
     'end_time': fields.String,
-    'cleaner': fields.Url('cleaner', absolute=True)
+    'cleaner': fields.Url('cleaner', absolute=False)
 }
 
 schedule_list_fields = {
@@ -21,8 +21,8 @@ schedule_list_fields = {
     'day_of_week': fields.String,
     'start_time': fields.String,
     'end_time': fields.String,
-    'cleaner': fields.Url('cleaner', absolute=True),
-    'url': fields.Url('schedule', absolute=True)
+    'cleaner': fields.Url('cleaner', absolute=False),
+    'url': fields.Url('schedule', absolute=False)
 }
 
 

@@ -17,9 +17,9 @@ order_fields = {
     'reference': fields.String,
     'transaction': fields.String,
     'price': fields.String,
-    'cleaner': fields.Url('cleaner', absolute=True),
-    'user': fields.Url('user', absolute=True),
-    'address': fields.Url('address', absolute=True),
+    'cleaner': fields.Url('cleaner', absolute=False),
+    'user': fields.Url('user', absolute=False),
+    'address': fields.Url('address', absolute=False)
 
 }
 
@@ -33,10 +33,10 @@ order_list_fields = {
     'reference': fields.String,
     'transaction': fields.String,
     'price': fields.String,
-    'cleaner': fields.Url('cleaner', absolute=True),
-    'user': fields.Url('user', absolute=True),
-    'address': fields.Url('address', absolute=True),
-    'url': fields.Url('order', absolute=True)
+    'cleaner': fields.Url('cleaner', absolute=False),
+    'user': fields.Url('user', absolute=False),
+    'address': fields.Url('address', absolute=False),
+    'url': fields.Url('order', absolute=False)
 }
 
 

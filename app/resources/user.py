@@ -8,17 +8,17 @@ user_fields = {
     'name': fields.String,
     'lastname': fields.String,
     'email': fields.String,
-    'addresses': fields.Url('user_addresses', absolute=True),
-    'orders': fields.Url('user_orders', absolute=True)
+    'addresses': fields.Url('user_addresses', absolute=False),
+    'orders': fields.Url('user_orders', absolute=False)
 }
 
 user_list_fields = {
     'name': fields.String,
     'lastname': fields.String,
     'email': fields.String,
-    'addresses': fields.Url('user_addresses', absolute=True),
-    'orders': fields.Url('user_orders', absolute=True),
-    'url': fields.Url('user', absolute=True)
+    'addresses': fields.Url('user_addresses', absolute=False),
+    'orders': fields.Url('user_orders', absolute=False),
+    'url': fields.Url('user', absolute=False)
 }
 
 
