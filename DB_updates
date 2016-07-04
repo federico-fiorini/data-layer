@@ -44,3 +44,16 @@ CREATE TABLE "public"."potential_user" (
     PRIMARY KEY ("potential_user_id"),
     UNIQUE ("email")
 );
+
+-- UPDATES FROM JULY 4
+-- BRANCH cleaner_rating
+--
+
+ALTER TABLE "public"."cleaner"
+  ADD COLUMN "description" text,
+  ADD COLUMN "review_rate" numeric,
+  ADD COLUMN "last_review" text;
+COMMENT ON COLUMN "public"."cleaner"."description" IS 'Including a short self-description and work experience';
+COMMENT ON COLUMN "public"."cleaner"."review_rate" IS 'Review rate out of 5';
+COMMENT ON COLUMN "public"."cleaner"."last_review" IS 'Last review given by user';
+
