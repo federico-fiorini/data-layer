@@ -40,9 +40,9 @@ class CleanerListAPI(Resource):
         self.parser.add_argument('lastname', type=str, required=True, help='No last name provided', location='json')
         self.parser.add_argument('email', type=str, default="", location='json')
         self.parser.add_argument('mobile_number', type=str, required=True, help='No mobile number provided', location='json')
-        self.parser.add_argument('description', type=str, default="", location='json')
-        self.parser.add_argument('review_rate', type=str, default="", location='json')
-        self.parser.add_argument('last_review', type=str, default="", location='json')
+        self.parser.add_argument('description', type=str, default=None, location='json')
+        self.parser.add_argument('review_rate', type=str, default=None, location='json')
+        self.parser.add_argument('last_review', type=str, default=None, location='json')
         super(CleanerListAPI, self).__init__()
 
     @auth.login_required
