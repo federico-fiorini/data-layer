@@ -34,3 +34,7 @@ api.add_resource(ScheduleAPI, '/api/v1.0/schedule/<int:schedule_id>', endpoint='
 api.add_resource(OrderListAPI, '/api/v1.0/orders', endpoint='orders')
 api.add_resource(OrderAPI, '/api/v1.0/order/<int:order_id>', endpoint='order')
 api.add_resource(OrderByReferenceAPI, '/api/v1.0/order/reference/<string:reference>', endpoint='order_reference')
+
+# Prospettive users endpoints
+api.add_resource(PotentialUserAPI, '/api/v1.0/potential_user/<int:potential_user_id>', endpoint='potential_user')
+api.add_resource(PotentialUserListAPI, '/api/v1.0/potential_users', endpoint='potential_users')

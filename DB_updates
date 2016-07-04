@@ -21,3 +21,26 @@ COMMENT ON COLUMN "public"."order"."reference" IS 'Reference to the order compos
 
 ALTER TABLE "public"."service" ADD COLUMN "description" text;
 
+
+
+--
+-- UPDATES STARTING FROM JUNE 28
+-- BRANCH prospettive_resource
+-- PULL REQUEST NOT DEFINED
+--
+
+CREATE SEQUENCE potential_user_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+CREATE TABLE "public"."potential_user" (
+    "potential_user_id" integer DEFAULT nextval('potential_user_seq'::regclass),
+    "email" text NOT NULL,
+    "zip" text NOT NULL,
+    "date" date NOT NULL,
+    PRIMARY KEY ("potential_user_id"),
+    UNIQUE ("email")
+);
