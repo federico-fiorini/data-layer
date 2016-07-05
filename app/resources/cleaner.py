@@ -9,6 +9,9 @@ cleaner_fields = {
     'lastname': fields.String,
     'email': fields.String,
     'mobile_number': fields.String,
+    'description': fields.String,
+    'review_rate': fields.String,
+    'last_review': fields.String,
     'schedules': fields.Url('cleaner_schedule', absolute=False),
     'orders': fields.Url('cleaner_orders', absolute=False)
 }
@@ -18,6 +21,9 @@ cleaner_list_fields = {
     'lastname': fields.String,
     'email': fields.String,
     'mobile_number': fields.String,
+    'description': fields.String,
+    'review_rate': fields.String,
+    'last_review': fields.String,
     'schedules': fields.Url('cleaner_schedule', absolute=False),
     'orders': fields.Url('cleaner_orders', absolute=False),
     'url': fields.Url('cleaner', absolute=False)
@@ -34,6 +40,9 @@ class CleanerListAPI(Resource):
         self.parser.add_argument('lastname', type=str, required=True, help='No last name provided', location='json')
         self.parser.add_argument('email', type=str, default="", location='json')
         self.parser.add_argument('mobile_number', type=str, required=True, help='No mobile number provided', location='json')
+        self.parser.add_argument('description', type=str, default=None, location='json')
+        self.parser.add_argument('review_rate', type=str, default=None, location='json')
+        self.parser.add_argument('last_review', type=str, default=None, location='json')
         super(CleanerListAPI, self).__init__()
 
     @auth.login_required
@@ -47,7 +56,9 @@ class CleanerListAPI(Resource):
     def post(self):
         # Create new cleaner
         args = self.parser.parse_args()
-        cleaner = Cleaner(name=args['name'], lastname=args['lastname'], email=args['email'], mobile_number=args['mobile_number'])
+        cleaner = Cleaner(name=args['name'], lastname=args['lastname'], email=args['email'],
+                          mobile_number=args['mobile_number'], description=args['description'],
+                          review_rate=args['review_rate'], last_review=args['last_review'])
 
         # Persist and return cleaner
         success = cleaner.persist()
@@ -67,6 +78,9 @@ class CleanerAPI(Resource):
         self.parser.add_argument('lastname', type=str, location='json')
         self.parser.add_argument('email', type=str, location='json')
         self.parser.add_argument('mobile_number', type=str, location='json')
+        self.parser.add_argument('description', type=str, location='json')
+        self.parser.add_argument('review_rate', type=str, location='json')
+        self.parser.add_argument('last_review', type=str, location='json')
         super(CleanerAPI, self).__init__()
 
     @auth.login_required
@@ -94,6 +108,9 @@ class CleanerAPI(Resource):
         cleaner.lastname = assign(args['lastname'], cleaner.lastname)
         cleaner.email = assign(args['email'], cleaner.email)
         cleaner.mobile_number = assign(args['mobile_number'], cleaner.mobile_number)
+        cleaner.description = assign(args['description'], cleaner.description)
+        cleaner.review_rate = assign(args['review_rate'], cleaner.review_rate)
+        cleaner.last_review = assign(args['last_review'], cleaner.last_review)
 
         # Persist changes and return cleaner
         cleaner.persist()
