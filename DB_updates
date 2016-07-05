@@ -57,3 +57,8 @@ COMMENT ON COLUMN "public"."cleaner"."description" IS 'Including a short self-de
 COMMENT ON COLUMN "public"."cleaner"."review_rate" IS 'Review rate out of 5';
 COMMENT ON COLUMN "public"."cleaner"."last_review" IS 'Last review given by user';
 
+-- UPDATED ON JULY 5
+-- BRANCH mobile_number
+--
+
+ALTER TABLE "public"."user" ADD COLUMN "mobile" text

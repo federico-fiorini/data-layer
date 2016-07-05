@@ -13,14 +13,16 @@ class User(db.Model):
     lastname = db.Column(db.String(50), unique=False)
     email = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(100), unique=False)
+    mobile = db.Column(db.String(15), unique=False)
     addresses = db.relationship('Address', backref='user', lazy='dynamic')
     orders = db.relationship('Order', backref='user', lazy='dynamic')
 
-    def __init__(self, name=None, lastname=None, email=None, password=None):
+    def __init__(self, name=None, lastname=None, email=None, password=None, mobile=None):
         self.name = name
         self.email = email
         self.password = password
         self.lastname = lastname
+        self.mobile = mobile
 
     def __repr__(self):
         return '<User %r>' % self.user_id
