@@ -49,7 +49,7 @@ class UserListAPI(Resource):
         # Create new user
         args = self.parser.parse_args()
         user = User(name=args['name'], lastname=args['lastname'], email=args['email'], password=args['password'],
-                    mobile=args['name'])
+                    mobile=args['mobile'])
 
         # Persist and return user
         success = user.persist()
