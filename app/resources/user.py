@@ -8,6 +8,7 @@ user_fields = {
     'name': fields.String,
     'lastname': fields.String,
     'email': fields.String,
+    'mobile': fields.String,
     'addresses': fields.Url('user_addresses', absolute=False),
     'orders': fields.Url('user_orders', absolute=False)
 }
@@ -16,6 +17,7 @@ user_list_fields = {
     'name': fields.String,
     'lastname': fields.String,
     'email': fields.String,
+    'mobile': fields.String,
     'addresses': fields.Url('user_addresses', absolute=False),
     'orders': fields.Url('user_orders', absolute=False),
     'url': fields.Url('user', absolute=False)
@@ -32,6 +34,7 @@ class UserListAPI(Resource):
         self.parser.add_argument('lastname', type=str, required=True, help='No last name provided', location='json')
         self.parser.add_argument('email', type=str, required=True, help='No email provided', location='json')
         self.parser.add_argument('password', type=str, required=True, help='No password provided', location='json')
+        self.parser.add_argument('mobile', type=str, required=False, help='No email provided', location='json')
         super(UserListAPI, self).__init__()
 
     @auth.login_required
@@ -45,7 +48,8 @@ class UserListAPI(Resource):
     def post(self):
         # Create new user
         args = self.parser.parse_args()
-        user = User(name=args['name'], lastname=args['lastname'], email=args['email'], password=args['password'])
+        user = User(name=args['name'], lastname=args['lastname'], email=args['email'], password=args['password'],
+                    mobile=args['mobile'])
 
         # Persist and return user
         success = user.persist()
@@ -64,6 +68,7 @@ class UserAPI(Resource):
         self.parser.add_argument('name', type=str, location='json')
         self.parser.add_argument('lastname', type=str, location='json')
         self.parser.add_argument('email', type=str, location='json')
+        self.parser.add_argument('mobile', type=str, location='json')
         self.parser.add_argument('password', type=str, location='json')
         super(UserAPI, self).__init__()
 
@@ -92,6 +97,7 @@ class UserAPI(Resource):
         user.lastname = assign(args['lastname'], user.lastname)
         user.email = assign(args['email'], user.email)
         user.password = assign(args['password'], user.password)
+        user.mobile = assign(args['mobile'], user.mobile)
 
         # Persist changes and return user
         user.persist()
