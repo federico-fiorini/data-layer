@@ -4,6 +4,7 @@ from flask_restful import Resource, fields, marshal_with
 index_fields = {
     'users': fields.Url('users', absolute=False),
     'user_authentication': fields.Url('user_authentication', absolute=False),
+    'potential_users': fields.Url('potential_users', absolute=False),
     'addresses': fields.Url('addresses', absolute=False),
     'cleaners': fields.Url('cleaners', absolute=False),
     'services': fields.Url('services', absolute=False),
