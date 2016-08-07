@@ -62,3 +62,10 @@ COMMENT ON COLUMN "public"."cleaner"."last_review" IS 'Last review given by user
 --
 
 ALTER TABLE "public"."user" ADD COLUMN "mobile" text
+
+
+-- UPDATED ON AUGUST 7
+-- BRANCH cleaner_picture
+--
+
+ALTER TABLE "public"."cleaner" ADD COLUMN "picture_url" text;
