@@ -16,9 +16,11 @@ class Address(db.Model):
     post_code = db.Column(db.String(50), unique=False)
     city = db.Column(db.String(50), unique=False)
     country = db.Column(db.String(50), unique=False)
+    neighbourhood = db.Column(db.String(50), unique=False)
     orders = db.relationship('Order', backref='address', lazy='dynamic')
 
-    def __init__(self, user_id=None, street=None, house_number=None, flat_number=None, post_code=None, city=None, country=None):
+    def __init__(self, user_id=None, street=None, house_number=None, flat_number=None, post_code=None, city=None,
+                 country=None, neighbourhood=None):
         self.user_id = user_id
         self.street = street
         self.house_number = house_number
@@ -26,6 +28,7 @@ class Address(db.Model):
         self.post_code = post_code
         self.city = city
         self.country = country
+        self.neighbourhood = neighbourhood
 
     def __repr__(self):
         return '<Address %r>' % self.address_id
