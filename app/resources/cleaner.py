@@ -12,6 +12,7 @@ cleaner_fields = {
     'description': fields.String,
     'review_rate': fields.String,
     'last_review': fields.String,
+    'picture_url': fields.String,
     'schedules': fields.Url('cleaner_schedule', absolute=False),
     'orders': fields.Url('cleaner_orders', absolute=False)
 }
@@ -24,6 +25,7 @@ cleaner_list_fields = {
     'description': fields.String,
     'review_rate': fields.String,
     'last_review': fields.String,
+    'picture_url': fields.String,
     'schedules': fields.Url('cleaner_schedule', absolute=False),
     'orders': fields.Url('cleaner_orders', absolute=False),
     'url': fields.Url('cleaner', absolute=False)
@@ -43,6 +45,7 @@ class CleanerListAPI(Resource):
         self.parser.add_argument('description', type=str, default=None, location='json')
         self.parser.add_argument('review_rate', type=str, default=None, location='json')
         self.parser.add_argument('last_review', type=str, default=None, location='json')
+        self.parser.add_argument('picture_url', type=str, default=None, location='json')
         super(CleanerListAPI, self).__init__()
 
     @auth.login_required
@@ -58,7 +61,8 @@ class CleanerListAPI(Resource):
         args = self.parser.parse_args()
         cleaner = Cleaner(name=args['name'], lastname=args['lastname'], email=args['email'],
                           mobile_number=args['mobile_number'], description=args['description'],
-                          review_rate=args['review_rate'], last_review=args['last_review'])
+                          review_rate=args['review_rate'], last_review=args['last_review'],
+                          picture_url=args['picture_url'])
 
         # Persist and return cleaner
         success = cleaner.persist()
@@ -81,6 +85,7 @@ class CleanerAPI(Resource):
         self.parser.add_argument('description', type=str, location='json')
         self.parser.add_argument('review_rate', type=str, location='json')
         self.parser.add_argument('last_review', type=str, location='json')
+        self.parser.add_argument('picture_url', type=str, location='json')
         super(CleanerAPI, self).__init__()
 
     @auth.login_required
@@ -111,6 +116,7 @@ class CleanerAPI(Resource):
         cleaner.description = assign(args['description'], cleaner.description)
         cleaner.review_rate = assign(args['review_rate'], cleaner.review_rate)
         cleaner.last_review = assign(args['last_review'], cleaner.last_review)
+        cleaner.picture_url = assign(args['picture_url'], cleaner.picture_url)
 
         # Persist changes and return cleaner
         cleaner.persist()

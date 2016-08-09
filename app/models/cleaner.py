@@ -17,11 +17,12 @@ class Cleaner(db.Model):
     description = db.Column(db.String(500), unique=False)
     review_rate = db.Column(db.Numeric, unique=False)
     last_review = db.Column(db.String(500), unique=False)
+    picture_url = db.Column(db.String(500), unique=False)
     orders = db.relationship('Order', backref='cleaner', lazy='dynamic')
     schedules = db.relationship('Schedule', backref='cleaner', lazy='dynamic')
 
     def __init__(self, name=None, lastname=None, email=None, mobile_number=None, description=None, review_rate=None,
-                 last_review=None):
+                 last_review=None, picture_url=None):
         self.name = name
         self.lastname = lastname
         self.email = email
@@ -29,6 +30,7 @@ class Cleaner(db.Model):
         self.description = description
         self.review_rate = review_rate
         self.last_review = last_review
+        self.picture_url = picture_url
 
     def __repr__(self):
         return '<Cleaner %r>' % self.cleaner_id
