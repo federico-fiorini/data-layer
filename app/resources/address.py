@@ -12,6 +12,7 @@ address_fields = {
     'post_code': fields.String,
     'city': fields.String,
     'country': fields.String,
+    'neighbourhood': fields.String,
     'orders': fields.Url('address_orders', absolute=False)
 }
 
@@ -22,6 +23,7 @@ address_list_fields = {
     'post_code': fields.String,
     'city': fields.String,
     'country': fields.String,
+    'neighbourhood': fields.String,
     'orders': fields.Url('address_orders', absolute=False),
     'url': fields.Url('address', absolute=False)
 }
@@ -39,6 +41,7 @@ class AddressAPI(Resource):
         self.parser.add_argument('post_code', type=str,  required=False, location='json')
         self.parser.add_argument('city', type=str,  required=False, location='json')
         self.parser.add_argument('country', type=str,  required=False, location='json')
+        self.parser.add_argument('neighbourhood', type=str, required=False, location='json')
         super(AddressAPI, self).__init__()
 
     @auth.login_required
@@ -68,6 +71,7 @@ class AddressAPI(Resource):
         address.post_code = assign(args['post_code'], address.post_code)
         address.city = assign(args['city'], address.city)
         address.country = assign(args['country'], address.country)
+        address.neighbourhood = assign(args['neighbourhood'], address.neighbourhood)
 
         # Persist changes and return address
         address.persist()
@@ -107,6 +111,7 @@ class AddressListByUserAPI(Resource):
         self.parser.add_argument('post_code', type=str,  required=True, help='No post code provided', location='json')
         self.parser.add_argument('city', type=str,  required=True, help='No city provided', location='json')
         self.parser.add_argument('country', type=str,  required=True, help='No country provided', location='json')
+        self.parser.add_argument('neighbourhood', type=str, required=False, default='', location='json')
         super(AddressListByUserAPI, self).__init__()
 
     @auth.login_required
@@ -125,8 +130,9 @@ class AddressListByUserAPI(Resource):
 
         # Create new address
         args = self.parser.parse_args()
-        address = Address(user_id=user_id, street=args['street'], house_number=args['house_number'], flat_number=args['flat_number'],
-                          post_code=args['post_code'], city=args['city'], country=args['country'])
+        address = Address(user_id=user_id, street=args['street'], house_number=args['house_number'], city=args['city'],
+                          post_code=args['post_code'], flat_number=args['flat_number'], country=args['country'],
+                          neighbourhood=args['neighbourhood'])
 
         # Persist and return address
         address.persist()
