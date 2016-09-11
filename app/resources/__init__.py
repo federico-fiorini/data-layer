@@ -23,3 +23,4 @@ from app.resources.schedule import *
 from app.resources.service import *
 from app.resources.user import *
 from app.resources.potential_user import *
+from app.resources.coverage import *

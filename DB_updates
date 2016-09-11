@@ -71,3 +71,15 @@ ALTER TABLE "public"."address" ADD COLUMN "neighbourhood" text;
 --
 
 ALTER TABLE "public"."cleaner" ADD COLUMN "picture_url" text;
+
+
+=======
+-- UPDATED ON SEPTEMBER 9th
+-- BRANCH zip_coverage
+--
+CREATE TABLE "public"."coverage" (
+    "cleaner_id" integer NOT NULL,
+    "zip" integer NOT NULL,
+    PRIMARY KEY ("cleaner_id", "zip"),
+    FOREIGN KEY ("cleaner_id") REFERENCES "public"."cleaner"("cleaner_id")
+);
