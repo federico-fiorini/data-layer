@@ -43,4 +43,4 @@ api.add_resource(PotentialUserListAPI, '/api/v1.0/potential_users', endpoint='po
 
 # Coverage endpoints
 api.add_resource(CoverageListAPI, '/api/v1.0/coverages', endpoint='coverages')
-api.add_resource(CoverageListByZipAPI, '/api/v1.0/coverage/<int:zip>', endpoint='coverage_zip')
+api.add_resource(CoverageListByZipAPI, '/api/v1.0/coverages/<int:zip>', endpoint='coverage_zip')

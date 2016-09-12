@@ -111,6 +111,6 @@ class CoverageListByCleanerAPI(Resource):
 
 class CoverageListByZipAPI(Resource):
     @auth.login_required
-    @marshal_with(coverage_fields, envelope='coverage')
+    @marshal_with(coverage_fields, envelope='coverages')
     def get(self, zip):
         return Coverage.get_all_by_zip(zip)
