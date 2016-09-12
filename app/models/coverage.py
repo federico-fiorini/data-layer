@@ -20,6 +20,7 @@ class Coverage(db.Model):
     def persist(self):
         db.session.add(self)
         db.session.commit()
+        self.cleaner_id
 
     @staticmethod
     def get_all():

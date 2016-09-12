@@ -102,5 +102,15 @@ class CoverageListByCleanerAPI(Resource):
         coverage = Coverage(cleaner_id=cleaner_id,  zip=args['zip'])
 
         # Persist and return schedule
-        coverage.persist()
+        try:
+            coverage.persist()
+        except:
+            abort(500, 'Zip already inserted')
+
         return coverage, 201
+
+class CoverageListByZipAPI(Resource):
+    @auth.login_required
+    @marshal_with(coverage_fields, envelope='coverage')
+    def get(self, zip):
+        return Coverage.get_all_by_zip(zip)
