@@ -10,7 +10,8 @@ index_fields = {
     'services': fields.Url('services', absolute=False),
     'orders': fields.Url('orders', absolute=False),
     'order_reference': fields.Url('order_reference', absolute=False),
-    'schedules': fields.Url('schedules', absolute=False)
+    'schedules': fields.Url('schedules', absolute=False),
+    'coverages' : fields.Url('coverages', absolute=False)
 
 }
 

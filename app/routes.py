@@ -25,6 +25,8 @@ api.add_resource(CleanerListAPI, '/api/v1.0/cleaners', endpoint='cleaners')
 api.add_resource(CleanerAPI, '/api/v1.0/cleaner/<int:cleaner_id>', endpoint='cleaner')
 api.add_resource(ScheduleListByCleanerAPI, '/api/v1.0/cleaner/<int:cleaner_id>/schedule', endpoint='cleaner_schedule')
 api.add_resource(OrderListByCleanerAPI, '/api/v1.0/cleaner/<int:cleaner_id>/orders', endpoint='cleaner_orders')
+api.add_resource(CoverageListByCleanerAPI, '/api/v1.0/cleaner/<int:cleaner_id>/coverages', endpoint='cleaner_coverages')
+api.add_resource(CoverageAPI, '/api/v1.0/cleaner/<int:cleaner_id>/coverage/<int:zip>', endpoint='cleaner_coverage')
 
 # Schedule endpoints
 api.add_resource(ScheduleListAPI, '/api/v1.0/schedules', endpoint='schedules')
@@ -38,3 +40,7 @@ api.add_resource(OrderByReferenceAPI, '/api/v1.0/order/reference/<string:referen
 # Prospettive users endpoints
 api.add_resource(PotentialUserAPI, '/api/v1.0/potential_user/<int:potential_user_id>', endpoint='potential_user')
 api.add_resource(PotentialUserListAPI, '/api/v1.0/potential_users', endpoint='potential_users')
+
+# Coverage endpoints
+api.add_resource(CoverageListAPI, '/api/v1.0/coverages', endpoint='coverages')
+api.add_resource(CoverageListByZipAPI, '/api/v1.0/coverages/<int:zip>', endpoint='coverage_zip')
