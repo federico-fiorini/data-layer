@@ -10,6 +10,12 @@ coverage_fields = {
     'zip': fields.Integer
 }
 
+coverage_list_fields = {
+    'cleaner': fields.Url('cleaner', absolute=False),
+    'zip': fields.Integer,
+    'url': fields.Url('cleaner_coverage', absolute=False)
+}
+
 
 class CoverageAPI(Resource):
     """
@@ -29,23 +35,6 @@ class CoverageAPI(Resource):
             abort(404)
 
         # Return user
-        return coverage
-
-    @auth.login_required
-    @marshal_with(coverage_fields, envelope='coverage')
-    def put(self, cleaner_id, zip):
-        # Get unique coverage by cleaner and zip
-        coverage = Coverage.get_by_cleaner_and_zip(cleaner_id, zip)
-        if coverage is None:
-            abort(404)
-
-        # Update schedule fields
-        args = self.parser.parse_args()
-        coverage.zip = assign(args['zip'], coverage.zip)
-        coverage.cleaner_id = assign(args['cleaner_id'], coverage.zip)
-
-        # Persist changes and return schedule
-        coverage.persist()
         return coverage
 
     @auth.login_required
@@ -70,7 +59,7 @@ class CoverageListAPI(Resource):
         super(CoverageListAPI, self).__init__()
 
     @auth.login_required
-    @marshal_with(coverage_fields, envelope='coverages')
+    @marshal_with(coverage_list_fields, envelope='coverages')
     def get(self):
         # Return all coverages
         return Coverage.get_all()
@@ -86,12 +75,12 @@ class CoverageListByCleanerAPI(Resource):
         super(CoverageListByCleanerAPI, self).__init__()
 
     @auth.login_required
-    @marshal_with(coverage_fields, envelope='coverage')
+    @marshal_with(coverage_list_fields, envelope='coverage')
     def get(self, cleaner_id):
         return Coverage.get_all_by_cleaner(cleaner_id)
 
     @auth.login_required
-    @marshal_with(coverage_fields, envelope='coverage')
+    @marshal_with(coverage_list_fields, envelope='coverage')
     def post(self, cleaner_id):
 
         # Validate cleaner
@@ -109,8 +98,9 @@ class CoverageListByCleanerAPI(Resource):
 
         return coverage, 201
 
+
 class CoverageListByZipAPI(Resource):
     @auth.login_required
-    @marshal_with(coverage_fields, envelope='coverages')
+    @marshal_with(coverage_list_fields, envelope='coverages')
     def get(self, zip):
         return Coverage.get_all_by_zip(zip)
