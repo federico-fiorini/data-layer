@@ -3,7 +3,6 @@ from flask import abort
 from flask_restful import Resource, reqparse, fields, marshal_with
 from app.models.coverage import Coverage
 from app.models.cleaner import Cleaner
-from app.common.utils import assign
 
 coverage_fields = {
     'cleaner': fields.Url('cleaner', absolute=False),

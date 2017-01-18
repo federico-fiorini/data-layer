@@ -2,7 +2,7 @@ from app.resources import auth
 from flask import abort
 from flask_restful import Resource, reqparse, fields, marshal_with
 from app.models.cleaner import Cleaner
-from app.common.utils import assign
+from app.common.utils import assign, set_null_if_blank
 
 cleaner_fields = {
     'name': fields.String,
@@ -61,6 +61,8 @@ class CleanerListAPI(Resource):
     def post(self):
         # Create new cleaner
         args = self.parser.parse_args()
+        args = set_null_if_blank(args)
+
         cleaner = Cleaner(name=args['name'], lastname=args['lastname'], email=args['email'],
                           mobile_number=args['mobile_number'], description=args['description'],
                           review_rate=args['review_rate'], last_review=args['last_review'],
@@ -111,6 +113,8 @@ class CleanerAPI(Resource):
 
         # Update cleaner fields
         args = self.parser.parse_args()
+        args = set_null_if_blank(args)
+
         cleaner.name = assign(args['name'], cleaner.name)
         cleaner.lastname = assign(args['lastname'], cleaner.lastname)
         cleaner.email = assign(args['email'], cleaner.email)
