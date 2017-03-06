@@ -3,6 +3,10 @@
 RESTful APIs - Connected to PostgreSQL database
 
 ####HOW TO SET UP
+
+    # Install dependencies
+    brew install postgresql
+    
     # Set up virtualenv
     ./deploy.sh
     
