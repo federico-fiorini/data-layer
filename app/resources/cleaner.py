@@ -18,20 +18,8 @@ cleaner_fields = {
     'coverages': fields.Url('cleaner_coverages', absolute=False)
 }
 
-cleaner_list_fields = {
-    'name': fields.String,
-    'lastname': fields.String,
-    'email': fields.String,
-    'mobile_number': fields.String,
-    'description': fields.String,
-    'review_rate': fields.String,
-    'last_review': fields.String,
-    'picture_url': fields.String,
-    'schedules': fields.Url('cleaner_schedule', absolute=False),
-    'orders': fields.Url('cleaner_orders', absolute=False),
-    'coverages': fields.Url('cleaner_coverages', absolute=False),
-    'url': fields.Url('cleaner', absolute=False)
-}
+cleaner_list_fields = cleaner_fields.copy()
+cleaner_list_fields['url'] = fields.Url('cleaner', absolute=False)
 
 
 class CleanerListAPI(Resource):

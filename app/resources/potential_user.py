@@ -10,12 +10,8 @@ potential_user_fields = {
     'date': fields.String
 }
 
-potential_user_list_fields = {
-    'email': fields.String,
-    'zip': fields.String,
-    'date': fields.String,
-    'url': fields.Url('potential_user', absolute=False)
-}
+potential_user_list_fields = potential_user_fields.copy()
+potential_user_list_fields['url'] = fields.Url('potential_user', absolute=False)
 
 
 class PotentialUserListAPI(Resource):

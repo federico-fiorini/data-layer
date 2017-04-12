@@ -16,17 +16,8 @@ address_fields = {
     'orders': fields.Url('address_orders', absolute=False)
 }
 
-address_list_fields = {
-    'street': fields.String,
-    'house_number': fields.String,
-    'flat_number': fields.String,
-    'post_code': fields.String,
-    'city': fields.String,
-    'country': fields.String,
-    'neighbourhood': fields.String,
-    'orders': fields.Url('address_orders', absolute=False),
-    'url': fields.Url('address', absolute=False)
-}
+address_list_fields = address_fields.copy()
+address_list_fields['url'] = fields.Url('address', absolute=False)
 
 
 class AddressAPI(Resource):

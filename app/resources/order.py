@@ -23,21 +23,8 @@ order_fields = {
 
 }
 
-order_list_fields = {
-    'date': fields.String,
-    'start_time': fields.String,
-    'end_time': fields.String,
-    'rooms': fields.String,
-    'special_rooms': fields.String,
-    'extra_services': fields.String,
-    'reference': fields.String,
-    'transaction': fields.String,
-    'price': fields.String,
-    'cleaner': fields.Url('cleaner', absolute=False),
-    'user': fields.Url('user', absolute=False),
-    'address': fields.Url('address', absolute=False),
-    'url': fields.Url('order', absolute=False)
-}
+order_list_fields = order_fields.copy()
+order_list_fields['url'] = fields.Url('order', absolute=False)
 
 
 class OrderAPI(Resource):

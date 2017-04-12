@@ -13,15 +13,8 @@ user_fields = {
     'orders': fields.Url('user_orders', absolute=False)
 }
 
-user_list_fields = {
-    'name': fields.String,
-    'lastname': fields.String,
-    'email': fields.String,
-    'mobile': fields.String,
-    'addresses': fields.Url('user_addresses', absolute=False),
-    'orders': fields.Url('user_orders', absolute=False),
-    'url': fields.Url('user', absolute=False)
-}
+user_list_fields = user_fields.copy()
+user_list_fields['url'] = fields.Url('user', absolute=False)
 
 
 class UserListAPI(Resource):
@@ -111,6 +104,7 @@ class UserAPI(Resource):
             abort(404)
 
         return {'result': True}
+
 
 class UserAuthenticateAPI(Resource):
     """
