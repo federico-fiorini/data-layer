@@ -5,7 +5,7 @@ from app.models.order import Order
 from app.models.address import Address
 from app.models.cleaner import Cleaner
 from app.models.user import User
-from app.common.utils import assign
+from app.common.utils import assign, is_valid_date
 
 order_fields = {
     'date': fields.String,
@@ -92,6 +92,7 @@ class OrderAPI(Resource):
 
         return {'result': True}
 
+
 class OrderByReferenceAPI(Resource):
     """
     Resource to return order by reference
@@ -113,10 +114,27 @@ class OrderListAPI(Resource):
     """
     Resource to manage orders list
     """
+
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('from', type=str, required=False, location='args')
+        self.parser.add_argument('to', type=str, required=False, location='args')
+        self.parser.add_argument('payed', type=str, required=False, location='args')
+        super(OrderListAPI, self).__init__()
+
     @auth.login_required
     @marshal_with(order_list_fields, envelope='orders')
     def get(self):
-        return Order.get_all()
+        args = self.parser.parse_args()
+        params = {k: v for k, v in args.items() if v is not None}
+
+        if 'from' in params and not is_valid_date(params['from']):
+            abort(400, 'Parameters incorrect')
+
+        if 'to' in params and not is_valid_date(params['to']):
+            abort(400, 'Parameters incorrect')
+
+        return Order.get_all(params)
 
 
 class OrderListByUserAPI(Resource):
