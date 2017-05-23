@@ -15,15 +15,8 @@ schedule_fields = {
     'cleaner': fields.Url('cleaner', absolute=False)
 }
 
-schedule_list_fields = {
-    'year': fields.String,
-    'week': fields.String,
-    'day_of_week': fields.String,
-    'start_time': fields.String,
-    'end_time': fields.String,
-    'cleaner': fields.Url('cleaner', absolute=False),
-    'url': fields.Url('schedule', absolute=False)
-}
+schedule_list_fields = schedule_fields.copy()
+schedule_list_fields['url'] = fields.Url('schedule', absolute=False)
 
 
 class ScheduleAPI(Resource):

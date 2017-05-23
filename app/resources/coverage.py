@@ -9,11 +9,8 @@ coverage_fields = {
     'zip': fields.Integer
 }
 
-coverage_list_fields = {
-    'cleaner': fields.Url('cleaner', absolute=False),
-    'zip': fields.Integer,
-    'url': fields.Url('cleaner_coverage', absolute=False)
-}
+coverage_list_fields = coverage_fields.copy()
+coverage_list_fields['url'] = fields.Url('cleaner_coverage', absolute=False)
 
 
 class CoverageAPI(Resource):
