@@ -53,8 +53,23 @@ class Order(db.Model):
         return True
 
     @staticmethod
-    def get_all():
-        return Order.query.all()
+    def get_all(filters):
+
+        query = db.session.query(Order)
+
+        if 'from' in filters:
+            query = query.filter(Order.date >= filters['from'])
+
+        if 'to' in filters:
+            query = query.filter(Order.date <= filters['to'])
+
+        if 'payed' in filters:
+            if filters['payed'].lower() == 'true':
+                query = query.filter(Order.transaction != None)  # Equity operator is necessary
+            elif filters['payed'].lower() == 'false':
+                query = query.filter(Order.transaction == None)  # Equity operator is necessary
+
+        return query.all()
 
     @staticmethod
     def get_by_reference(reference):
