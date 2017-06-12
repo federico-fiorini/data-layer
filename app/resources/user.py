@@ -22,6 +22,9 @@ class UserListAPI(Resource):
     Resource to manage users
     """
     def __init__(self):
+        self.get_parser = reqparse.RequestParser()
+        self.get_parser.add_argument('email', type=str, required=False, location='args')
+
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('name', type=str, required=True, help='No name provided', location='json')
         self.parser.add_argument('lastname', type=str, required=True, help='No last name provided', location='json')
@@ -33,8 +36,11 @@ class UserListAPI(Resource):
     @auth.login_required
     @marshal_with(user_list_fields, envelope='users')
     def get(self):
-        # Return all users
-        return User.get_all()
+        # Return users
+        args = self.get_parser.parse_args()
+        params = {k: v for k, v in args.items() if v is not None}
+
+        return User.get_all(params)
 
     @auth.login_required
     @marshal_with(user_list_fields, envelope='user')
