@@ -38,8 +38,13 @@ class User(db.Model):
         return True
 
     @staticmethod
-    def get_all():
-        return User.query.all()
+    def get_all(filter_dict):
+
+        query = db.session.query(User)
+        for attr, value in filter_dict.items():
+            query = query.filter(getattr(User, attr) == value)
+
+        return query.all()
 
     @staticmethod
     def get_by_id(user_id):
