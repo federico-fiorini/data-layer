@@ -1,8 +1,8 @@
-##TD LIMPO - DATA LAYER
+## TD LIMPO - DATA LAYER
 
 RESTful APIs - Connected to PostgreSQL database
 
-####HOW TO SET UP
+#### HOW TO SET UP
 
     # Install dependencies
     brew install postgresql
@@ -23,5 +23,6 @@ RESTful APIs - Connected to PostgreSQL database
     # Exit virtual environment
     deactivate
 
-####HOW TO RUN
+#### HOW TO RUN
+
     ./run.py
